@@ -53,7 +53,7 @@ public class AlgorithmsTests {
 					new BigInteger(ks.get(i)),new BigInteger(Ms.get(i)),
 					new BigInteger(bsShouldBe.get(i)),new BigInteger(inverseKsShouldBe.get(i)),
 					new BigInteger(ys1ShouldBe.get(i)),new BigInteger(ys2ShouldBe.get(i)), i);
-			System.out.println("Elgamal test num:"+ (i+1) + " succeed.");
+			System.out.println("Elgamal test num: "+ (i+1) + " succeed.");
 		}
 	}
 	
@@ -73,35 +73,15 @@ public class AlgorithmsTests {
 		int counter = 0;
 		for (byte[] key : keys) {
 			byte[] encrypted = aes.encrypt(initialVector, key);
-			assertArrayEquals("AES failed test num:"+counter,ciphers.get(counter), encrypted);
+			assertArrayEquals("AES (same message) failed test num: "+counter,ciphers.get(counter), encrypted);
+			
+			byte[] aesResult = aes.decrypt(ciphers.get(counter), key);
+			assertArrayEquals("AES (same message) failed test num: "+counter + " decrypted message isn't the same.",
+					aesResult,initialVector);
+			
 			counter++;
-			System.out.println("AES 1test num:"+ counter + " succeed.");
-		}
-		String key = "2b7e151628aed2a6abf7158809cf4f3c ";
-		String[] plaintexts = {
-				"6bc1bee22e409f96e93d7e117393172a",
-				"ae2d8a571e03ac9c9eb76fac45af8e51",
-				"30c81c46a35ce411e5fbc1191a0a52ef",
-				"f69f2445df4f9b17ad2b417be66c3710"};
-		String[] cyphertexts = {
-				"3ad77bb40d7a3660a89ecaf32466ef97",
-				"f5d3d58503b9699de785895a96fdbaaf",
-				"43b1cd7f598ece23881b00e3ed030688",
-				"7b0c785e27e8ad3f8223207104725dd4"};
-		byte[] keyBytes = fromStringToBytes(key);
-	    StringBuilder sb = new StringBuilder();
-	    
-	    for (byte b : keyBytes) {
-	        sb.append(String.format("%02X ", b));
-	    }
-		for(int k = 0; k < 4; k++)
-		{
-
-			byte[] plaintextBytes = fromStringToBytes(plaintexts[k]);
-			byte[] cyphertextBytes = fromStringToBytes(cyphertexts[k]);
-			byte[] aesAns = aes.encrypt(plaintextBytes, keyBytes);
-			assertArrayEquals(aesAns, cyphertextBytes);
-			System.out.println("AES 2test num:"+ (k+1) + " succeed.");
+			System.out.println("AES (same message) test num: "+ counter + " succeed.");
+			
 		}
 		
 		for(int k = 1; k < 5;k++)
@@ -113,9 +93,16 @@ public class AlgorithmsTests {
 			for(byte[] plian : plainsVector)
 			{
 				byte[] aesAns = aes.encrypt(plian, keyVector);
-				assertArrayEquals(aesAns, ciphersVector.get(counter));
-				System.out.println("AES "+k+" key plains and ciphers num: " + (counter+1) +" try succeed.");
+				assertArrayEquals("AES "+k+" key, plains and ciphers num: " + (counter+1) +" failed.",
+						aesAns, ciphersVector.get(counter));
+				
+				
+				byte[] aesResult = aes.decrypt(ciphersVector.get(counter), keyVector);
+				assertArrayEquals("AES "+k+" key, plains and ciphers num: " + (counter+1) +" failed decrypted message isn't the same.",
+						aesResult,plian);
+				
 				counter++;
+				System.out.println("AES "+k+" key, plains and ciphers num: " + counter +" try succeed.");
 			}
 		}
 	}
@@ -146,7 +133,7 @@ public class AlgorithmsTests {
 					new BigInteger(as.get(i)),new BigInteger(AsShouldBe.get(i)),
 					new BigInteger(bs.get(i)),new BigInteger(BsShouldBe.get(i)),
 					new BigInteger(keysShouldBe.get(i)), i);
-			System.out.println("Diffie-Hellman test num:"+ (i+1) + " succeed.");
+			System.out.println("Diffie-Hellman test num: "+ (i+1) + " succeed.");
 		}
 	}
 
