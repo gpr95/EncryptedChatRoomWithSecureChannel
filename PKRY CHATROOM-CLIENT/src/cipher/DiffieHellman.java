@@ -54,24 +54,25 @@ public class DiffieHellman
 		do 
 		{
 			generatorPublic = new BigInteger(bitLength, randomizer);
-		} while (generatorPublic.compareTo(primePublic.subtract(new BigInteger("1"))) < 0);
+		} while (generatorPublic.compareTo(primePublic.subtract(new BigInteger("1"))) > 0);
 		
 		elgamal.setPublicBigPrime(primePublic);
 		elgamal.setPublicGenerator(generatorPublic);
 	}
 
 	/** Generating Diffie-Hellman :  a value, calculating A value and 
-	 * setting Elgamal :  t=a, counting b=d^t(modp), generating k, counting k' */
+	 * setting Elgamal :  generating t, counting b=d^t(modp), generating k, counting k' */
 	public void randomizePrivateValue() 
 	{
 		Random randomizer = new Random();
 		do 
 		{
 			privateValue = new BigInteger(primePublic.bitLength(), randomizer);
-		} while (privateValue.compareTo(primePublic.subtract(new BigInteger("1"))) < 0);
+		} while (privateValue.compareTo(primePublic.subtract(new BigInteger("1"))) > 0);
 
 		calculateSendingValue();
-		elgamal.setPrivateRandomNumber(privateValue);
+		elgamal.generatePrivateValue();
+	//	elgamal.setPrivateRandomNumber(privateValue);
 		elgamal.countPublicValue();
 		elgamal.randomPrivateValue();
 	}

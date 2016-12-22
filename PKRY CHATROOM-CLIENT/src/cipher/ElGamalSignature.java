@@ -35,7 +35,15 @@ public class ElGamalSignature {
 		if(publicComputedNumber == null)
 			publicComputedNumber = publicGenerator.modPow(privateRandomNumber,publicBigPrime);
 	}
-	
+
+	/** Random private t value */
+	public void generatePrivateValue()
+	{
+		Random randomizer = new Random();
+		do {
+			privateRandomNumber =new BigInteger(publicBigPrime.bitLength(), randomizer);
+		} while (privateRandomNumber.compareTo(publicBigPrime.subtract(new BigInteger("1"))) > 0);
+	}
 	/** Random private value k and calculate k' */
 	public void randomPrivateValue()
 	{
@@ -178,4 +186,5 @@ public class ElGamalSignature {
 	{
 		this.inverseOfSecretRandomNumber = inverseOfSecretRandomNumber;
 	}
+
 }
