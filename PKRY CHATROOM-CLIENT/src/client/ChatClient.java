@@ -78,7 +78,7 @@ public class ChatClient extends JFrame
 	public ChatClient()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 645, 343);
+		setBounds(100, 100, 845, 343);
 		setBackground(Color.DARK_GRAY);
 		
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -171,6 +171,7 @@ public class ChatClient extends JFrame
 		JTextArea chatArea = new JTextArea();
 		((DefaultCaret) chatArea.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		chatArea.setEditable(false);
+		chatArea.setLineWrap(true);
 		handlers.put(tabbedPane.getTabCount(), chatArea);
 		JScrollPane jspForChat = new JScrollPane(chatArea);
 		jspForChat.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -230,6 +231,12 @@ public class ChatClient extends JFrame
 					.append("[" + userFrom + "(ManInTheMiddle)]" + " : " + message + "\n");
 		else
 			handlers.get(tabbedPane.indexOfTab(userFrom)).append("[" + userFrom + "]" + " : " + message + "\n");
+		tabbedPane.setSelectedIndex(tabbedPane.indexOfTab(userFrom));
+	}
+	
+	public void showEncryptionInfo(String userFrom, String info, String msg)
+	{
+		handlers.get(tabbedPane.indexOfTab(userFrom)).append("[" + userFrom + "]" + " : " + info + "\n" + msg + "\n");
 		tabbedPane.setSelectedIndex(tabbedPane.indexOfTab(userFrom));
 	}
 
