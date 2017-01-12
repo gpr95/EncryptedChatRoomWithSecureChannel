@@ -221,14 +221,14 @@ public class AlgorithmsTests {
 		byte[] cipherVector = fromStringToBytes("3ad77bb40d7a3660a89ecaf32466ef97");
 		byte[] keyVector = fromStringToBytes("2b7e151628aed2a6abf7158809cf4f3c");
 		byte[] aesAns = aes.encrypt(plainVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 1 failed.",
+		assertArrayEquals("AES 128 key, plains and ciphers num 1 failed.",
 				aesAns, cipherVector);
 		
 		
 		byte[] aesResult = aes.decrypt(cipherVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 1 failed decrypted message isn't the same.",
+		assertArrayEquals("AES 128 key, plains and ciphers num 1 failed decrypted message isn't the same.",
 				aesResult,plainVector);
-		System.out.println("AES first key, plains and ciphers num 1 try succeed.");
+		System.out.println("AES 128 key, plains and ciphers num 1 try succeed.");
 	}
 	
 	/**
@@ -244,14 +244,14 @@ public class AlgorithmsTests {
 		byte[] cipherVector = fromStringToBytes("f5d3d58503b9699de785895a96fdbaaf");
 		byte[] keyVector = fromStringToBytes("2b7e151628aed2a6abf7158809cf4f3c");
 		byte[] aesAns = aes.encrypt(plainVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 2 failed.",
+		assertArrayEquals("AES 128 key, plains and ciphers num 2 failed.",
 				aesAns, cipherVector);
 		
 		
 		byte[] aesResult = aes.decrypt(cipherVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 2 failed decrypted message isn't the same.",
+		assertArrayEquals("AES 128 key, plains and ciphers num 2 failed decrypted message isn't the same.",
 				aesResult,plainVector);
-		System.out.println("AES first key, plains and ciphers num 2 try succeed.");
+		System.out.println("AES 128 key, plains and ciphers num 2 try succeed.");
 	}
 	
 	/**
@@ -267,14 +267,14 @@ public class AlgorithmsTests {
 		byte[] cipherVector = fromStringToBytes("43b1cd7f598ece23881b00e3ed030688");
 		byte[] keyVector = fromStringToBytes("2b7e151628aed2a6abf7158809cf4f3c");
 		byte[] aesAns = aes.encrypt(plainVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 3 failed.",
+		assertArrayEquals("AES 128 key, plains and ciphers num 3 failed.",
 				aesAns, cipherVector);
 		
 		
 		byte[] aesResult = aes.decrypt(cipherVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 3 failed decrypted message isn't the same.",
+		assertArrayEquals("AES 128 key, plains and ciphers num 3 failed decrypted message isn't the same.",
 				aesResult,plainVector);
-		System.out.println("AES first key, plains and ciphers num 3 try succeed.");
+		System.out.println("AES 128 key, plains and ciphers num 3 try succeed.");
 	}
 	
 	/**
@@ -290,14 +290,14 @@ public class AlgorithmsTests {
 		byte[] cipherVector = fromStringToBytes("7b0c785e27e8ad3f8223207104725dd4");
 		byte[] keyVector = fromStringToBytes("2b7e151628aed2a6abf7158809cf4f3c");
 		byte[] aesAns = aes.encrypt(plainVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 4 failed.",
+		assertArrayEquals("AES 128 key, plains and ciphers num 4 failed.",
 				aesAns, cipherVector);
 		
 		
 		byte[] aesResult = aes.decrypt(cipherVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 4 failed decrypted message isn't the same.",
+		assertArrayEquals("AES 128 key, plains and ciphers num 4 failed decrypted message isn't the same.",
 				aesResult,plainVector);
-		System.out.println("AES first key, plains and ciphers num 4 try succeed.");
+		System.out.println("AES 128 key, plains and ciphers num 4 try succeed.");
 	}
 	
 	/**
@@ -313,14 +313,14 @@ public class AlgorithmsTests {
 		byte[] cipherVector = fromStringToBytes("f3eed1bdb5d2a03c064b5a7e3db181f8");
 		byte[] keyVector = fromStringToBytes("603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4");
 		byte[] aesAns = aes.encrypt(plainVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 1 failed.",
+		assertArrayEquals("AES 256 key, plains and ciphers num 1 failed.",
 				aesAns, cipherVector);
 		
 		
 		byte[] aesResult = aes.decrypt(cipherVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 1 failed decrypted message isn't the same.",
+		assertArrayEquals("AES 256 key, plains and ciphers num 1 failed decrypted message isn't the same.",
 				aesResult,plainVector);
-		System.out.println("AES first key, plains and ciphers num 1 try succeed.");
+		System.out.println("AES 256 key, plains and ciphers num 1 try succeed.");
 	}
 	
 	/**
@@ -336,14 +336,14 @@ public class AlgorithmsTests {
 		byte[] cipherVector = fromStringToBytes("591ccb10d410ed26dc5ba74a31362870");
 		byte[] keyVector = fromStringToBytes("603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4");
 		byte[] aesAns = aes.encrypt(plainVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 2 failed.",
+		assertArrayEquals("AES 256 key, plains and ciphers num 2 failed.",
 				aesAns, cipherVector);
 		
 		
 		byte[] aesResult = aes.decrypt(cipherVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 2 failed decrypted message isn't the same.",
+		assertArrayEquals("AES 256 key, plains and ciphers num 2 failed decrypted message isn't the same.",
 				aesResult,plainVector);
-		System.out.println("AES first key, plains and ciphers num 2 try succeed.");
+		System.out.println("AES 256 key, plains and ciphers num 2 try succeed.");
 	}
 	
 	/**
@@ -359,14 +359,14 @@ public class AlgorithmsTests {
 		byte[] cipherVector = fromStringToBytes("b6ed21b99ca6f4f9f153e7b1beafed1d");
 		byte[] keyVector = fromStringToBytes("603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4");
 		byte[] aesAns = aes.encrypt(plainVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 3 failed.",
+		assertArrayEquals("AES 256 key, plains and ciphers num 3 failed.",
 				aesAns, cipherVector);
 		
 		
 		byte[] aesResult = aes.decrypt(cipherVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 3 failed decrypted message isn't the same.",
+		assertArrayEquals("AES 256 key, plains and ciphers num 3 failed decrypted message isn't the same.",
 				aesResult,plainVector);
-		System.out.println("AES first key, plains and ciphers num 3 try succeed.");
+		System.out.println("AES 256 key, plains and ciphers num 3 try succeed.");
 	}
 	
 	/**
@@ -382,14 +382,14 @@ public class AlgorithmsTests {
 		byte[] cipherVector = fromStringToBytes("23304b7a39f9f3ff067d8d8f9e24ecc7");
 		byte[] keyVector = fromStringToBytes("603deb1015ca71be2b73aef0857d77811f352c073b6108d72d9810a30914dff4");
 		byte[] aesAns = aes.encrypt(plainVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 4 failed.",
+		assertArrayEquals("AES 256 key, plains and ciphers num 4 failed.",
 				aesAns, cipherVector);
 		
 		
 		byte[] aesResult = aes.decrypt(cipherVector, keyVector);
-		assertArrayEquals("AES first key, plains and ciphers num 4 failed decrypted message isn't the same.",
+		assertArrayEquals("AES 256 key, plains and ciphers num 4 failed decrypted message isn't the same.",
 				aesResult,plainVector);
-		System.out.println("AES first key, plains and ciphers num 4 try succeed.");
+		System.out.println("AES 256 key, plains and ciphers num 4 try succeed.");
 	}
 	
 	

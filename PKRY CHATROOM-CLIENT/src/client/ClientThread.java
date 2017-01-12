@@ -183,7 +183,7 @@ public class ClientThread extends Thread
 					JPanel panel = frameThread.generatePanelForTab();
 					frameThread.getTabbedPane().addTab(from, panel);
 					frameThread.showEncryptionInfo(from, "RECEIVED_INIT_COMMUNICATION received p,g,A", "");
-					frameThread.showEncryptionInfo(from, "RECEIVED_INIT_COMMUNICATION making signature of A", "");
+					frameThread.showEncryptionInfo(from, "RECEIVED_INIT_COMMUNICATION making signature of received A", "");
 					frameThread.showEncryptionInfo(from, "RECEIVED_INIT_COMMUNICATION generated key", 
 							someoneKeyAgreement.getKey().toString());
 	
@@ -193,8 +193,8 @@ public class ClientThread extends Thread
 						dp.setFromUserName(clientName);
 						dp.setToUserName(from);
 						dp.setHeader(Header.BACKWARD_INIT);
-						dp.setAdministrationMsg("<p><" + someoneKeyAgreement.getP() + ">" + 
-								"<g><" + someoneKeyAgreement.getG() + ">" + 
+						dp.setAdministrationMsg(//"<p><" + someoneKeyAgreement.getP() + ">" + 
+								//"<g><" + someoneKeyAgreement.getG() + ">" + 
 								"<B><" + someoneKeyAgreement.getA() + ">" +
 								"<y1><" + someoneKeyAgreement.getElgamal().getSendingFirstValue() + ">" +
 								"<y2><" + someoneKeyAgreement.getElgamal().getSendingSecondValue() + ">" + 
@@ -202,8 +202,8 @@ public class ClientThread extends Thread
 						oOutputStream.writeObject(dp);
 						oOutputStream.flush();
 						keyAgreement.put(from, someoneKeyAgreement);
-						frameThread.showEncryptionInfo(from, "BACKWARDINIT_COMMUNICATION sending p", someoneKeyAgreement.getP());
-						frameThread.showEncryptionInfo(from, "BACKWARDINIT_COMMUNICATION sending g", someoneKeyAgreement.getG());
+					//	frameThread.showEncryptionInfo(from, "BACKWARDINIT_COMMUNICATION sending p", someoneKeyAgreement.getP());
+					//	frameThread.showEncryptionInfo(from, "BACKWARDINIT_COMMUNICATION sending g", someoneKeyAgreement.getG());
 						frameThread.showEncryptionInfo(from, "BACKWARDINIT_COMMUNICATION sending B", someoneKeyAgreement.getA());
 						frameThread.showEncryptionInfo(from, "BACKWARDINIT_COMMUNICATION sending y1", 
 								someoneKeyAgreement.getElgamal().getSendingFirstValue().toString());
@@ -223,14 +223,12 @@ public class ClientThread extends Thread
 			case BACKWARD_INIT:
 				List<String> key = Arrays.asList(receivedMessage.getAdministrationMsg().split("[<>]+"));
 				key = key.subList(1, key.size());
-				keyAgreement.get(from).setPublicVars(new BigInteger(key.get(key.indexOf("p") + 1)),
-						new BigInteger(key.get(key.indexOf("g") + 1)));
 				keyAgreement.get(from).setReceivedValue(new BigInteger(key.get(key.indexOf("B") + 1)));
 				keyAgreement.get(from).setReceivedSignature1(new BigInteger(key.get(key.indexOf("y1") + 1)));
 				keyAgreement.get(from).setReceivedSignature2(new BigInteger(key.get(key.indexOf("y2") + 1)));
 				BigInteger tmpComputedNumber = keyAgreement.get(from).getElgamal().getPublicComputedNumber();
 				keyAgreement.get(from).getElgamal().setPublicComputedNumber(new BigInteger(key.get(key.indexOf("b") + 1)));
-				frameThread.showEncryptionInfo(from, "RECEIVED_BACKWARDINIT_COMMUNICATION received p,g,B,y1,y2,b", "");
+				frameThread.showEncryptionInfo(from, "RECEIVED_BACKWARDINIT_COMMUNICATION received  B,y1,y2,b", "");
 				BigInteger tmpReceivedValue = new BigInteger(key.get(key.indexOf("B") + 1));
 				keyAgreement.get(from).setReceivedValue(keyAgreement.get(from).getSendingValue());
 				keyAgreement.get(from).checkSignature();				
