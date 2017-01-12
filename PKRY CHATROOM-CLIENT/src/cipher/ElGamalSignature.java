@@ -68,12 +68,17 @@ public class ElGamalSignature {
 	 */
 	public void countSendingValues(BigInteger M)
 	{
+		System.out.println("making sign of:" + M.toString());
 		sendingFirstValue = publicGenerator.modPow(secretRandomNumber, publicBigPrime);
 		BigInteger tmpMultiplier = M.subtract(privateRandomNumber.multiply(sendingFirstValue));
-
+		System.out.println("making sign y1:" + sendingFirstValue.toString());
 		tmpMultiplier = tmpMultiplier.multiply(inverseOfSecretRandomNumber);
 		BigInteger publicMinusOne = publicBigPrime.subtract(new BigInteger("1"));
 		sendingSecondValue = tmpMultiplier.mod(publicMinusOne);
+		System.out.println("making sign y2:" + sendingSecondValue.toString());
+		System.out.println("making sign b:" + publicComputedNumber.toString());
+		System.out.println("making sign p:" + publicBigPrime.toString());
+		System.out.println("making sign g:" + publicGenerator.toString());
 	}
 	
 	/** Calculates left side of equation for checking signature 
@@ -82,6 +87,7 @@ public class ElGamalSignature {
 	 */
 	public BigInteger checkSignatureLeft(BigInteger message) 
 	{
+		System.out.println("checking sign of:" + message.toString());
 		return publicGenerator.modPow(message, publicBigPrime);
 	}
 
@@ -92,6 +98,11 @@ public class ElGamalSignature {
 	 */
 	public BigInteger checkSignatureRight(BigInteger receivedSignature1,BigInteger receivedSignature2) 
 	{
+		System.out.println("checking sign y1:" + receivedSignature1.toString());
+		System.out.println("checking sign y2:" + receivedSignature2.toString());
+		System.out.println("checking sign b:" + publicComputedNumber.toString());
+		System.out.println("checking sign p:" + publicBigPrime.toString());
+		System.out.println("checking sign g:" + publicGenerator.toString());
 		BigInteger by1 = publicComputedNumber.modPow(receivedSignature1, publicBigPrime);
 		BigInteger y1y2 = receivedSignature1.modPow(receivedSignature2, publicBigPrime);
 		BigInteger multiply = by1.multiply(y1y2);

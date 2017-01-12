@@ -172,22 +172,26 @@ public class ClientThread extends Thread
 				someoneKeyAgreement.setPublicVars(new BigInteger(keys.get(keys.indexOf("p") + 1)),
 						new BigInteger(keys.get(keys.indexOf("g") + 1)));
 				someoneKeyAgreement.randomizePrivateValue();
+				BigInteger tmpSendingValue = someoneKeyAgreement.getSendingValue();
+				someoneKeyAgreement.setA(new BigInteger(keys.get(keys.indexOf("B") + 1)));
 				someoneKeyAgreement.makeSignature();
-				BigInteger tempPublicCountedValue = someoneKeyAgreement.getElgamal().getPublicComputedNumber();
+//				BigInteger tempPublicCountedValue = someoneKeyAgreement.getElgamal().getPublicComputedNumber();
 				someoneKeyAgreement.setReceivedValue(new BigInteger(keys.get(keys.indexOf("B") + 1)));
-				someoneKeyAgreement.setReceivedSignature1(new BigInteger(keys.get(keys.indexOf("y1") + 1)));
-				someoneKeyAgreement.setReceivedSignature2(new BigInteger(keys.get(keys.indexOf("y2") + 1)));
-				someoneKeyAgreement.getElgamal().setPublicComputedNumber(new BigInteger(keys.get(keys.indexOf("b") + 1)));
-				someoneKeyAgreement.checkSignature();
-				someoneKeyAgreement.getElgamal().setPublicComputedNumber(tempPublicCountedValue);
+//				someoneKeyAgreement.setReceivedSignature1(new BigInteger(keys.get(keys.indexOf("y1") + 1)));
+//				someoneKeyAgreement.setReceivedSignature2(new BigInteger(keys.get(keys.indexOf("y2") + 1)));
+//				someoneKeyAgreement.getElgamal().setPublicComputedNumber(new BigInteger(keys.get(keys.indexOf("b") + 1)));
+//				someoneKeyAgreement.checkSignature();
+//				someoneKeyAgreement.getElgamal().setPublicComputedNumber(tempPublicCountedValue);
+				someoneKeyAgreement.setA(tmpSendingValue);
 				someoneKeyAgreement.generateKey();
 				if (frameThread.getTabbedPane().indexOfTab(from) == -1) 
 				{
 					JPanel panel = frameThread.generatePanelForTab();
 					frameThread.getTabbedPane().addTab(from, panel);
-					frameThread.showEncryptionInfo(from, "RECEIVED_INIT_COMMUNICATION received p,g,A,y1,y2,b", "");
-					frameThread.showEncryptionInfo(from, "RECEIVED_INIT_COMMUNICATION checkedSignature", "authorized=" 
-							+ someoneKeyAgreement.isAuthorized());
+					frameThread.showEncryptionInfo(from, "RECEIVED_INIT_COMMUNICATION received p,g,A", "");
+					frameThread.showEncryptionInfo(from, "RECEIVED_INIT_COMMUNICATION making signature of A", "");
+//					frameThread.showEncryptionInfo(from, "RECEIVED_INIT_COMMUNICATION checkedSignature", "authorized=" 
+//							+ someoneKeyAgreement.isAuthorized());
 					frameThread.showEncryptionInfo(from, "RECEIVED_INIT_COMMUNICATION generated key", 
 							someoneKeyAgreement.getKey().toString());
 	
@@ -199,10 +203,10 @@ public class ClientThread extends Thread
 						dp.setHeader(Header.BACKWARD_INIT);
 						dp.setAdministrationMsg("<p><" + someoneKeyAgreement.getP() + ">" + 
 								"<g><" + someoneKeyAgreement.getG() + ">" + 
-								"<B><" + someoneKeyAgreement.getA() + ">" + 
+								"<B><" + someoneKeyAgreement.getA() + ">" +
 								"<y1><" + someoneKeyAgreement.getElgamal().getSendingFirstValue() + ">" +
 								"<y2><" + someoneKeyAgreement.getElgamal().getSendingSecondValue() + ">" + 
-								"<b><" + tempPublicCountedValue + ">");
+								"<b><" + someoneKeyAgreement.getElgamal().getPublicComputedNumber() + ">");
 						oOutputStream.writeObject(dp);
 						oOutputStream.flush();
 						keyAgreement.put(from, someoneKeyAgreement);
@@ -213,14 +217,14 @@ public class ClientThread extends Thread
 								someoneKeyAgreement.getElgamal().getSendingFirstValue().toString());
 						frameThread.showEncryptionInfo(from, "BACKWARDINIT_COMMUNICATION sending y2", 
 								someoneKeyAgreement.getElgamal().getSendingSecondValue().toString());
-						frameThread.showEncryptionInfo(from, "BACKWARDINIT_COMMUNICATION sending b", tempPublicCountedValue.toString());
+						frameThread.showEncryptionInfo(from, "BACKWARDINIT_COMMUNICATION sending b", 
+								someoneKeyAgreement.getElgamal().getPublicComputedNumber().toString());
 					} 
 					catch (IOException e) 
 					{
 						JOptionPane.showMessageDialog(frameThread, "Sending init backward Failed", "ERROR",
 								JOptionPane.ERROR_MESSAGE);
 					}
-					frameThread.showMessage(from, from + " has started conversation.",! keyAgreement.get(from).isAuthorized());
 				}
 	
 				break;
@@ -232,14 +236,64 @@ public class ClientThread extends Thread
 				keyAgreement.get(from).setReceivedValue(new BigInteger(key.get(key.indexOf("B") + 1)));
 				keyAgreement.get(from).setReceivedSignature1(new BigInteger(key.get(key.indexOf("y1") + 1)));
 				keyAgreement.get(from).setReceivedSignature2(new BigInteger(key.get(key.indexOf("y2") + 1)));
+				BigInteger tmpComputedNumber = keyAgreement.get(from).getElgamal().getPublicComputedNumber();
 				keyAgreement.get(from).getElgamal().setPublicComputedNumber(new BigInteger(key.get(key.indexOf("b") + 1)));
 				frameThread.showEncryptionInfo(from, "RECEIVED_BACKWARDINIT_COMMUNICATION received p,g,B,y1,y2,b", "");
-				keyAgreement.get(from).checkSignature();
+				BigInteger tmpReceivedValue = new BigInteger(key.get(key.indexOf("B") + 1));
+				keyAgreement.get(from).setReceivedValue(keyAgreement.get(from).getSendingValue());
+				keyAgreement.get(from).checkSignature();				
 				frameThread.showEncryptionInfo(from, "RECEIVED_BACKWARDINIT_COMMUNICATION checkedSignature",  "authorized=" 
 						+ keyAgreement.get(from).isAuthorized());
+				keyAgreement.get(from).setReceivedValue(tmpReceivedValue);
 				keyAgreement.get(from).generateKey();
-				frameThread.showEncryptionInfo(from, "RECEIVED_INIT_COMMUNICATION generated key", 
+				frameThread.showEncryptionInfo(from, "RECEIVED_BACKWARDINIT_COMMUNICATION generated key", 
 						keyAgreement.get(from).getKey().toString());
+				BigInteger tmpSendedValue = keyAgreement.get(from).getSendingValue();
+				frameThread.showEncryptionInfo(from, "RECEIVED_BACKWARDINIT_COMMUNICATION making signature of received B", keyAgreement.get(from).getReceivedValue().toString());
+				keyAgreement.get(from).setA(tmpReceivedValue);
+				keyAgreement.get(from).getElgamal().setPublicComputedNumber(tmpComputedNumber);
+				keyAgreement.get(from).makeSignature();
+				keyAgreement.get(from).setA(tmpSendedValue);
+				try 
+				{
+					DataPackage dp = new DataPackage();
+					dp.setFromUserName(clientName);
+					dp.setToUserName(from);
+					dp.setHeader(Header.SIGNATURE_ENDING);
+					dp.setAdministrationMsg(
+							"<y1><" + keyAgreement.get(from).getElgamal().getSendingFirstValue() + ">" +
+							"<y2><" + keyAgreement.get(from).getElgamal().getSendingSecondValue() + ">" + 
+							"<b><" + keyAgreement.get(from).getElgamal().getPublicComputedNumber() + ">");
+					oOutputStream.writeObject(dp);
+					oOutputStream.flush();
+					frameThread.showEncryptionInfo(from, "RECEIVED_BACKWARDINIT_COMMUNICATION sending y1", 
+							keyAgreement.get(from).getElgamal().getSendingFirstValue().toString());
+					frameThread.showEncryptionInfo(from, "RECEIVED_BACKWARDINIT_COMMUNICATION sending y2", 
+							keyAgreement.get(from).getElgamal().getSendingSecondValue().toString());
+					frameThread.showEncryptionInfo(from, "RECEIVED_BACKWARDINIT_COMMUNICATION sending b", 
+							keyAgreement.get(from).getElgamal().getPublicComputedNumber().toString());
+				} 
+				catch (IOException e) 
+				{
+					JOptionPane.showMessageDialog(frameThread, "Sending SIGNATURE_ENDING Failed", "ERROR",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				break;
+			case SIGNATURE_ENDING:
+				List<String> msgs = Arrays.asList(receivedMessage.getAdministrationMsg().split("[<>]+"));
+				msgs = msgs.subList(1, msgs.size());
+				keyAgreement.get(from).setReceivedSignature1(new BigInteger(msgs.get(msgs.indexOf("y1") + 1)));
+				keyAgreement.get(from).setReceivedSignature2(new BigInteger(msgs.get(msgs.indexOf("y2") + 1)));
+				keyAgreement.get(from).getElgamal().setPublicComputedNumber(new BigInteger(msgs.get(msgs.indexOf("b") + 1)));
+				frameThread.showEncryptionInfo(from, "SIGNATURE_ENDING received y1,y2,b", "");
+				BigInteger receivedValue = keyAgreement.get(from).getReceivedValue();
+				keyAgreement.get(from).setReceivedValue(keyAgreement.get(from).getSendingValue());
+				frameThread.showEncryptionInfo(from, "SIGNATURE_ENDING checking signature of sended A", keyAgreement.get(from).getSendingValue().toString());
+				keyAgreement.get(from).checkSignature();
+				keyAgreement.get(from).setReceivedValue(receivedValue);
+				frameThread.showEncryptionInfo(from, "SIGNATURE_ENDING checkedSignature",  "authorized=" 
+						+ keyAgreement.get(from).isAuthorized());
+				frameThread.showMessage(from, from + " has started conversation.",! keyAgreement.get(from).isAuthorized());
 				break;
 			case DESTROY:
 				if (frameThread.getTabbedPane().indexOfTab(from) != -1) 
@@ -276,7 +330,7 @@ public class ClientThread extends Thread
 		DiffieHellman myKeyAgreement = new DiffieHellman();
 		myKeyAgreement.generatePublicVars();
 		myKeyAgreement.randomizePrivateValue();
-		myKeyAgreement.makeSignature();
+//		myKeyAgreement.makeSignature();
 
 		DataPackage dp = new DataPackage();
 		dp.setFromUserName(clientName);
@@ -284,10 +338,10 @@ public class ClientThread extends Thread
 		dp.setHeader(Header.INIT);
 		dp.setAdministrationMsg("<p><" + myKeyAgreement.getP() + ">" + 
 								"<g><" + myKeyAgreement.getG() + ">" + 
-								"<B><"+ myKeyAgreement.getA() + ">" + 
-								"<y1><"+ myKeyAgreement.getElgamal().getSendingFirstValue() + ">" + 
-								"<y2><"+ myKeyAgreement.getElgamal().getSendingSecondValue() + ">" +
-								"<b><"+ myKeyAgreement.getElgamal().getPublicComputedNumber() + ">");
+								"<B><"+ myKeyAgreement.getA() + ">" );
+//								"<y1><"+ myKeyAgreement.getElgamal().getSendingFirstValue() + ">" + 
+//								"<y2><"+ myKeyAgreement.getElgamal().getSendingSecondValue() + ">" +
+//								"<b><"+ myKeyAgreement.getElgamal().getPublicComputedNumber() + ">");
 		try 
 		{
 			oOutputStream.writeObject(dp);
@@ -299,9 +353,9 @@ public class ClientThread extends Thread
 			frameThread.showEncryptionInfo(userNameTo, "INIT_COMMUNICATION sending p", myKeyAgreement.getP());
 			frameThread.showEncryptionInfo(userNameTo, "INIT_COMMUNICATION sending g", myKeyAgreement.getG());
 			frameThread.showEncryptionInfo(userNameTo, "INIT_COMMUNICATION sending A", myKeyAgreement.getA());
-			frameThread.showEncryptionInfo(userNameTo, "INIT_COMMUNICATION sending y1", myKeyAgreement.getElgamal().getSendingFirstValue().toString());
-			frameThread.showEncryptionInfo(userNameTo, "INIT_COMMUNICATION sending y2", myKeyAgreement.getElgamal().getSendingSecondValue().toString());
-			frameThread.showEncryptionInfo(userNameTo, "INIT_COMMUNICATION sending b", myKeyAgreement.getElgamal().getPublicComputedNumber().toString());
+//			frameThread.showEncryptionInfo(userNameTo, "INIT_COMMUNICATION sending y1", myKeyAgreement.getElgamal().getSendingFirstValue().toString());
+//			frameThread.showEncryptionInfo(userNameTo, "INIT_COMMUNICATION sending y2", myKeyAgreement.getElgamal().getSendingSecondValue().toString());
+//			frameThread.showEncryptionInfo(userNameTo, "INIT_COMMUNICATION sending b", myKeyAgreement.getElgamal().getPublicComputedNumber().toString());
 		} 
 		catch (IOException e) 
 		{

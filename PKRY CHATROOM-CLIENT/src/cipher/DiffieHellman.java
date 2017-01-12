@@ -124,6 +124,11 @@ public class DiffieHellman
 	{
 		this.receivedValue = B;
 	}
+	
+	public BigInteger getReceivedValue()
+	{
+		return this.receivedValue;
+	}
 
 	public String getP() 
 	{
@@ -138,6 +143,11 @@ public class DiffieHellman
 	public String getA() 
 	{
 		return sendingValue.toString();
+	}
+	
+	public void setA(BigInteger A)
+	{
+		this.sendingValue = A;
 	}
 
 	public byte[] getKeyBytes() 
